@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "./Header.jsx";
+import Navbar from "./Navbar.jsx";
 import {
-  decreasePlantQuantity,
-  deletePlantFromCart,
-  increasePlantQuantity,
+  removeItem,
   selectCartItems,
   selectCartTotalCost,
   selectCartTotalQuantity,
+  updateQuantity,
 } from "../features/CartSlice.jsx";
 
 function CartItem() {
@@ -16,25 +15,25 @@ function CartItem() {
   const totalCartQuantity = useSelector(selectCartTotalQuantity);
   const totalCartCost = useSelector(selectCartTotalCost);
 
-  function handleIncreaseQuantity(plantId) {
-    dispatch(increasePlantQuantity(plantId));
+  function increaseCartItemQuantity(plantId) {
+    dispatch(updateQuantity({ plantId, quantityChange: 1 }));
   }
 
-  function handleDecreaseQuantity(plantId) {
-    dispatch(decreasePlantQuantity(plantId));
+  function decreaseCartItemQuantity(plantId) {
+    dispatch(updateQuantity({ plantId, quantityChange: -1 }));
   }
 
-  function handleDeletePlant(plantId) {
-    dispatch(deletePlantFromCart(plantId));
+  function deleteCartItemFromCart(plantId) {
+    dispatch(removeItem(plantId));
   }
 
   function handleCheckoutButtonClick() {
-    window.alert("Coming Soon");
+    window.alert("Coming Soon: checkout will be available soon.");
   }
 
   return (
     <div className="page-shell">
-      <Header />
+      <Navbar />
       <main className="cart-page">
         <section className="cart-summary-panel">
           <p className="eyebrow">Shopping cart</p>
@@ -89,7 +88,7 @@ function CartItem() {
                     <button
                       type="button"
                       className="quantity-button"
-                      onClick={() => handleDecreaseQuantity(cartItem.id)}
+                      onClick={() => decreaseCartItemQuantity(cartItem.id)}
                       aria-label={`Decrease ${cartItem.name} quantity`}
                     >
                       -
@@ -98,7 +97,7 @@ function CartItem() {
                     <button
                       type="button"
                       className="quantity-button"
-                      onClick={() => handleIncreaseQuantity(cartItem.id)}
+                      onClick={() => increaseCartItemQuantity(cartItem.id)}
                       aria-label={`Increase ${cartItem.name} quantity`}
                     >
                       +
@@ -108,7 +107,7 @@ function CartItem() {
                   <button
                     type="button"
                     className="delete-item-button"
-                    onClick={() => handleDeletePlant(cartItem.id)}
+                    onClick={() => deleteCartItemFromCart(cartItem.id)}
                   >
                     Delete
                   </button>

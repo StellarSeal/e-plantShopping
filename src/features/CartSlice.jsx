@@ -8,6 +8,45 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: initialCartState,
   reducers: {
+    addItem: (state, action) => {
+      const selectedPlant = action.payload;
+      const existingPlant = state.cartItems.find(
+        (cartItem) => cartItem.id === selectedPlant.id
+      );
+
+      if (!existingPlant) {
+        state.cartItems.push({
+          ...selectedPlant,
+          quantity: 1,
+        });
+      }
+    },
+    removeItem: (state, action) => {
+      const selectedPlantId = action.payload;
+      state.cartItems = state.cartItems.filter(
+        (cartItem) => cartItem.id !== selectedPlantId
+      );
+    },
+    updateQuantity: (state, action) => {
+      const { plantId, quantityChange } = action.payload;
+      const existingPlant = state.cartItems.find(
+        (cartItem) => cartItem.id === plantId
+      );
+
+      if (!existingPlant) {
+        return;
+      }
+
+      const updatedQuantity = existingPlant.quantity + quantityChange;
+
+      if (updatedQuantity > 0) {
+        existingPlant.quantity = updatedQuantity;
+      } else {
+        state.cartItems = state.cartItems.filter(
+          (cartItem) => cartItem.id !== plantId
+        );
+      }
+    },
     addPlantToCart: (state, action) => {
       const selectedPlant = action.payload;
       const existingPlant = state.cartItems.find(
@@ -55,10 +94,13 @@ const cartSlice = createSlice({
 });
 
 export const {
+  addItem,
   addPlantToCart,
   increasePlantQuantity,
   decreasePlantQuantity,
+  removeItem,
   deletePlantFromCart,
+  updateQuantity,
 } = cartSlice.actions;
 
 export const selectCartItems = (state) => state.cart.cartItems;

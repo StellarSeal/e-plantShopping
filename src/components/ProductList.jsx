@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "./Header.jsx";
+import Navbar from "./Navbar.jsx";
 import {
-  addPlantToCart,
+  addItem,
   selectCartItems,
   selectCartTotalQuantity,
 } from "../features/CartSlice.jsx";
@@ -157,16 +158,21 @@ function ProductList() {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
   const totalCartQuantity = useSelector(selectCartTotalQuantity);
+  const [addedPlantIds, setAddedPlantIds] = useState([]);
 
   const cartPlantIds = cartItems.map((cartItem) => cartItem.id);
 
   function handleAddPlantToCart(plant) {
-    dispatch(addPlantToCart(plant));
+    dispatch(addItem(plant));
+    setAddedPlantIds((currentAddedPlantIds) => [
+      ...currentAddedPlantIds,
+      plant.id,
+    ]);
   }
 
   return (
     <div className="page-shell">
-      <Header />
+      <Navbar />
       <main className="product-page">
         <section className="product-page-heading">
           <p className="eyebrow">Fresh indoor plants</p>
@@ -189,7 +195,9 @@ function ProductList() {
 
             <div className="plant-card-grid">
               {category.plants.map((plant) => {
-                const plantAlreadyAdded = cartPlantIds.includes(plant.id);
+                const plantAlreadyAdded =
+                  cartPlantIds.includes(plant.id) ||
+                  addedPlantIds.includes(plant.id);
 
                 return (
                   <article className="plant-card" key={plant.id}>

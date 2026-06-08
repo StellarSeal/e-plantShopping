@@ -1,8 +1,8 @@
 {
-  "name": "paradise-nursery",
+  "name": "e-plantshopping",
   "version": "1.0.0",
   "private": true,
-  "description": "Paradise Nursery React shopping cart project",
+  "description": "e-plantShopping Paradise Nursery React shopping cart project",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
